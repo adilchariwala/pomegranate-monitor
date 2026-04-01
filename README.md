@@ -1,8 +1,26 @@
 ## 🌱 Pomegranate Monitor 
 
-A real-time sensor system that monitors the health of my parents pomegranate tree and displays live data on a web dashboard.
+---
 
-## Project Proposal
+##  Week 10 Status
+
+At this stage of development:
+
+- ESP32 firmware successfully built and deployed using PlatformIO  
+- DHT22 sensor connected and collecting live temperature and humidity data local Data output is structured for future API integration  
+
+
+---
+
+## 🔧 Current Functionality
+
+The system currently:
+
+- Reads **air temperature (°C)** and **relative humidity (%)** from the DHT22  
+- Outputs live data every 2 seconds via the serial monitor  
+- Includes basic error handling for failed sensor reads  
+
+
  
 ### What Data Will Be Collected
  
