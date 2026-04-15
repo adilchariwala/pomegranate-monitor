@@ -6,7 +6,7 @@
 ##  Current Status 
 - Sensor-to-database pipeline is working. Data is transmitted through a well-defined API protocol with error detection and handling.
 - Unit testing has thoroughly error-checked the transmission process.
-- DHT22 is only sensor working, need to configure the rest. 
+- DHT22 and Soil Sensor are transmitting, BH1750 is not.
 
 
 

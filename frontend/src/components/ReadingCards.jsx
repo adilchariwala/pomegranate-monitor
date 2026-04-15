@@ -29,11 +29,9 @@ function fmt(v, decimals = 1) {
 
 function timeSince(ts) {
   if (!ts) return ''
-  const secs = Math.floor((Date.now() - new Date(ts).getTime()) / 1000)
-  if (secs < 60) return `${secs}s ago`
-  if (secs < 3600) return `${Math.floor(secs / 60)}m ago`
-  return `${Math.floor(secs / 3600)}h ago`
+  return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
+
 
 export default function ReadingCards({ latest, stats }) {
   const v = latest || {}
