@@ -6,7 +6,8 @@
 ##  Current Status 
 - Sensor-to-database pipeline is working. Data is transmitted through a well-defined API protocol with error detection and handling.
 - Unit testing has thoroughly error-checked the transmission process.
-- Spec sheet development is being finalized for communication between the database and the front end, as well as for front-end functionality.
+- DHT22 is only sensor working, need to configure the rest. 
+
 
 
 ##  Week 10 Status
