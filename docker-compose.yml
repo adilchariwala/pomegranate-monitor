@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: pomegranate_monitor
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      MONGODB_URL: mongodb://mongo:27017
+      DATABASE_NAME: pomegranate_monitor
+      API_KEY: ${API_KEY}
+      DEBUG: ${DEBUG:-false}
+    ports:
+      - "8000:8000"   # expose for ESP32 local testing; remove in pure-cloud deploy
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mongo_data:

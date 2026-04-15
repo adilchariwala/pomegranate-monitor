@@ -2,6 +2,16 @@
 
 ---
 
+
+##  Current Status 
+
+### Week 11: March 30 – April 4
+
+- Sensor-to-database pipeline is working. Data is transmitted through a well-defined API protocol with error detection and handling.
+- Unit testing has thoroughly error-checked the transmission process.
+- Spec sheet development is being finalized for communication between the database and the front end, as well as for front-end functionality.
+
+
 ##  Week 10 Status
 
 At this stage of development:

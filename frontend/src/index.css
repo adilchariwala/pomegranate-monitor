@@ -1,0 +1,161 @@
+:root {
+  --green: #4caf72;
+  --green-dark: #2d7a4f;
+  --green-light: #e8f5ee;
+  --red: #e05252;
+  --yellow: #f0a500;
+  --blue: #3a7bd5;
+  --bg: #f4f6f3;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --border: #e2e8e0;
+  --shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── Login ── */
+.login-wrap {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; background: var(--green-dark);
+}
+.login-card {
+  background: var(--card); border-radius: 16px; padding: 2.5rem 2rem;
+  width: 100%; max-width: 380px; text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.login-card h1 { font-size: 1.8rem; margin-bottom: .25rem; }
+.login-card p  { color: var(--muted); margin-bottom: 1.5rem; font-size: .9rem; }
+.login-card input {
+  width: 100%; padding: .75rem 1rem; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 1rem; margin-bottom: .75rem; outline: none;
+  transition: border-color .2s;
+}
+.login-card input:focus { border-color: var(--green); }
+.login-card input.err { border-color: var(--red); }
+.login-card .errmsg { color: var(--red); font-size: .82rem; margin-bottom: .75rem; }
+.btn-primary {
+  width: 100%; padding: .75rem; background: var(--green); color: #fff;
+  border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;
+  font-weight: 600; transition: background .2s;
+}
+.btn-primary:hover { background: var(--green-dark); }
+.btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ── Layout ── */
+.app-header {
+  background: var(--green-dark); color: #fff; padding: .9rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.app-header h1 { font-size: 1.2rem; font-weight: 700; }
+.header-right { display: flex; align-items: center; gap: 1rem; }
+.status-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  background: #aaa; margin-right: .4rem;
+}
+.status-dot.online { background: #6ee97a; }
+.btn-sm {
+  padding: .35rem .8rem; font-size: .82rem; border-radius: 6px;
+  background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3);
+  cursor: pointer; transition: background .2s;
+}
+.btn-sm:hover { background: rgba(255,255,255,.25); }
+
+.main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+
+/* ── Sensor selector ── */
+.sensor-bar {
+  display: flex; align-items: center; gap: .6rem; margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.sensor-bar label { font-size: .85rem; color: var(--muted); font-weight: 500; }
+.sensor-bar select {
+  padding: .45rem .8rem; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: .9rem; background: var(--card); cursor: pointer; outline: none;
+}
+
+/* ── Cards grid ── */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  display: flex; flex-direction: column; gap: .3rem;
+}
+.card-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+.card-value { font-size: 2rem; font-weight: 700; line-height: 1; }
+.card-unit  { font-size: .9rem; color: var(--muted); }
+.card-sub   { font-size: .78rem; color: var(--muted); margin-top: .15rem; }
+.card.alert-card { border-color: var(--red); background: #fff5f5; }
+.card.warn-card  { border-color: var(--yellow); background: #fffbf0; }
+.card.good-card  { border-color: var(--green); background: var(--green-light); }
+
+/* ── Health score ── */
+.health-row { display: grid; grid-template-columns: 200px 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+.health-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem;
+  box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem;
+}
+.health-score-number { font-size: 3rem; font-weight: 800; }
+.score-bar-wrap { width: 100%; background: var(--border); border-radius: 99px; height: 10px; overflow: hidden; }
+.score-bar { height: 10px; border-radius: 99px; transition: width .5s ease; }
+
+/* ── Alerts ── */
+.alerts-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem;
+  box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  overflow-y: auto; max-height: 200px;
+}
+.alerts-card h3 { font-size: .9rem; color: var(--muted); margin-bottom: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.alert-item {
+  display: flex; align-items: flex-start; gap: .5rem;
+  padding: .5rem 0; border-bottom: 1px solid var(--border); font-size: .88rem;
+}
+.alert-item:last-child { border-bottom: none; }
+.alert-icon { font-size: 1rem; flex-shrink: 0; }
+.no-alerts { color: var(--green); font-size: .9rem; font-weight: 500; }
+
+/* ── Chart section ── */
+.chart-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem;
+  box-shadow: var(--shadow); border: 1.5px solid var(--border); margin-bottom: 1.25rem;
+}
+.chart-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: .5rem;
+}
+.chart-header h2 { font-size: 1rem; font-weight: 600; }
+.tab-group { display: flex; gap: .4rem; }
+.tab {
+  padding: .3rem .7rem; border-radius: 6px; font-size: .82rem; cursor: pointer;
+  border: 1.5px solid var(--border); background: var(--card); color: var(--muted);
+  transition: all .15s;
+}
+.tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+.tab:hover:not(.active) { border-color: var(--green); color: var(--green); }
+
+/* ── Loading / error ── */
+.center { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+.spinner {
+  width: 40px; height: 40px; border: 4px solid var(--border);
+  border-top-color: var(--green); border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-box {
+  background: #fff5f5; border: 1.5px solid var(--red); border-radius: 12px;
+  padding: 1.5rem; max-width: 400px; text-align: center; color: var(--red);
+}
+
+@media (max-width: 600px) {
+  .health-row { grid-template-columns: 1fr; }
+  .app-header h1 { font-size: 1rem; }
+}
