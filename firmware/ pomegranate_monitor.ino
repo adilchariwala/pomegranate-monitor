@@ -1,20 +1,17 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <DHT.h>
-#include <BH1750.h>
-#include <Wire.h>
 #include "secrets.h"
 
 // ── Pin Definitions ────────────────────────────────────────────────────────
 #define DHT_PIN        4
 #define DHT_TYPE       DHT22
 #define SOIL_PIN       34
-#define SDA_PIN        21
-#define SCL_PIN        22
+#define LDR_PIN        35
 
-// ── Soil moisture calibration (adjust to your sensor) ─────────────────────
-#define SOIL_DRY       3200   // ADC reading in completely dry soil
-#define SOIL_WET       1200   // ADC reading in saturated soil
+// soil sensor calibration
+#define SOIL_DRY       3200
+#define SOIL_WET       1200
 
 // ── Config ─────────────────────────────────────────────────────────────────
 #define POST_INTERVAL_MS  30000
@@ -22,7 +19,6 @@
 #define LOCATION          "living-room"
 
 DHT dht(DHT_PIN, DHT_TYPE);
-BH1750 lightMeter;
 
 // ── WiFi ───────────────────────────────────────────────────────────────────
 void connectWiFi() {
@@ -48,6 +44,12 @@ float readSoilMoisture() {
   int raw = analogRead(SOIL_PIN);
   raw = constrain(raw, SOIL_WET, SOIL_DRY);
   return map(raw, SOIL_DRY, SOIL_WET, 0, 100);
+}
+
+// ── Light → lux estimate ───────────────────────────────────────────────────
+float readLux() {
+  int raw = analogRead(LDR_PIN);
+  return map(raw, 0, 4095, 0, 100000);
 }
 
 // ── POST to API ─────────────────────────────────────────────────────────────
@@ -99,10 +101,7 @@ void setup() {
   delay(1000);
   Serial.println("\n[Boot] Pomegranate Monitor starting...");
 
-  Wire.begin(SDA_PIN, SCL_PIN);
-  lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE);
   dht.begin();
-
   connectWiFi();
   Serial.println("[Boot] Ready.");
 }
@@ -115,7 +114,10 @@ void loop() {
   float temp     = dht.readTemperature();
   float humidity = dht.readHumidity();
   float soil     = readSoilMoisture();
-float lux = max(0.0f, lightMeter.readLightLevel());
+  float lux      = readLux();
+
+  Serial.print("Raw soil: ");
+  Serial.println(analogRead(SOIL_PIN));
 
   if (isnan(temp) || isnan(humidity)) {
     Serial.println("[Sensor] DHT22 read failed, retrying...");

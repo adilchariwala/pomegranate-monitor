@@ -14,7 +14,12 @@ const METRICS = [
 function fmtTime(iso) {
   if (!iso) return ''
   const d = new Date(iso)
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  return d.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'America/New_York'
+  })
 }
 
 function CustomTooltip({ active, payload, label, unit }) {

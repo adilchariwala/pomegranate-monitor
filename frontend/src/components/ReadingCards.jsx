@@ -29,9 +29,15 @@ function fmt(v, decimals = 1) {
 
 function timeSince(ts) {
   if (!ts) return ''
-  return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const d = new Date(ts)
+  const local = new Date(d.getTime() - (4 * 60 * 60 * 1000))
+  return local.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'UTC'
+  })
 }
-
 
 export default function ReadingCards({ latest, stats }) {
   const v = latest || {}
@@ -41,10 +47,10 @@ export default function ReadingCards({ latest, stats }) {
     {
       label: '🌡 Temperature',
       metric: 'temperature',
-      value: v.temperature,
-      unit: '°C',
-      min: s.temperature?.min,
-      max: s.temperature?.max,
+      value: v.temperature !== undefined ? (v.temperature * 9/5) + 32 : undefined,
+      unit: '°F',
+      min: s.temperature?.min !== undefined ? (s.temperature.min * 9/5) + 32 : undefined,
+      max: s.temperature?.max !== undefined ? (s.temperature.max * 9/5) + 32 : undefined,
     },
     {
       label: '💧 Humidity',
