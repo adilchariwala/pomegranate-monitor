@@ -6,7 +6,8 @@ const LATEST_MS  = 5_000   // fast poll — just the latest reading card
 const REFRESH_MS = 30_000  // full refresh — stats, history, sensors
 
 export default function App() {
-  const [apiKey, setApiKey]       = useState(sessionStorage.getItem('pmKey') || '')
+  const urlKey = new URLSearchParams(window.location.search).get('key') || ''
+  const [apiKey, setApiKey]       = useState(urlKey || sessionStorage.getItem('pmKey') || '')
   const [keyInput, setKeyInput]   = useState('')
   const [authErr, setAuthErr]     = useState(false)
   const [logging, setLogging]     = useState(false)
