@@ -73,7 +73,7 @@ export default function App() {
     setLogging(true)
     setAuthErr(false)
     try {
-      await fetchLatest(sensorId, keyInput)
+      await fetchSensors(keyInput)
       sessionStorage.setItem('pmKey', keyInput)
       setApiKey(keyInput)
     } catch {
