@@ -1,6 +1,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <DHT.h>
+#include "esp_wpa2.h"
 #include "secrets.h"
 
 // ── Pin Definitions ────────────────────────────────────────────────────────

@@ -30,12 +30,11 @@ function fmt(v, decimals = 1) {
 function timeSince(ts) {
   if (!ts) return ''
   const d = new Date(ts)
-  const local = new Date(d.getTime() - (4 * 60 * 60 * 1000))
-  return local.toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
+  return d.toLocaleTimeString('en-US', {
+    hour: '2-digit',
     minute: '2-digit',
     hour12: true,
-    timeZone: 'UTC'
+    timeZone: 'America/New_York'
   })
 }
 

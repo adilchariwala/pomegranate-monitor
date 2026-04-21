@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { fetchLatest, fetchStats, fetchHistory, fetchSensors } from './api.js'
 import Dashboard from './components/Dashboard.jsx'
 
-const REFRESH_MS = 30_000
+const LATEST_MS  = 5_000   // fast poll — just the latest reading card
+const REFRESH_MS = 30_000  // full refresh — stats, history, sensors
 
 export default function App() {
   const [apiKey, setApiKey]       = useState(sessionStorage.getItem('pmKey') || '')
@@ -20,7 +21,16 @@ export default function App() {
   const [loading, setLoading]     = useState(false)
   const [dataErr, setDataErr]     = useState(null)
 
-  // ── Fetch all dashboard data ─────────────────────────────────────────────
+  // ── Fast poll: latest reading only ───────────────────────────────────────
+  const pollLatest = useCallback(async (key, sid) => {
+    try {
+      setLatest(await fetchLatest(sid, key))
+    } catch {
+      // silently skip — full refresh will surface real errors
+    }
+  }, [])
+
+  // ── Full refresh: stats, history, sensors (+ latest) ────────────────────
   const refresh = useCallback(async (key, sid, h) => {
     setLoading(true)
     setDataErr(null)
@@ -42,7 +52,14 @@ export default function App() {
     }
   }, [])
 
-  // ── Auto-refresh ─────────────────────────────────────────────────────────
+  // ── Fast 5s poll for latest reading ──────────────────────────────────────
+  useEffect(() => {
+    if (!apiKey) return
+    const id = setInterval(() => pollLatest(apiKey, sensorId), LATEST_MS)
+    return () => clearInterval(id)
+  }, [apiKey, sensorId, pollLatest])
+
+  // ── Full 30s refresh ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!apiKey) return
     refresh(apiKey, sensorId, hours)

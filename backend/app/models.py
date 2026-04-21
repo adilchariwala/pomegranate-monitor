@@ -81,6 +81,9 @@ class HealthCheckResponse(BaseModel):
 # ── Helpers ────────────────────────────────────────────────────────────────
 
 def doc_to_reading(doc: dict) -> SensorReadingResponse:
+    ts = doc["timestamp"]
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=timezone.utc)
     return SensorReadingResponse(
         id=str(doc["_id"]),
         sensor_id=doc["sensor_id"],
@@ -88,7 +91,7 @@ def doc_to_reading(doc: dict) -> SensorReadingResponse:
         humidity=doc["humidity"],
         soil_moisture=doc.get("soil_moisture", 0.0),
         light_lux=doc.get("light_lux", 0.0),
-        timestamp=doc["timestamp"],
+        timestamp=ts,
         location=doc.get("location"),
     )
 
