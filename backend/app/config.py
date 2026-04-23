@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     database_name: str = "pomegranate_monitor"
     api_key: str
     debug: bool = False
+    allowed_origins: str = "*"
 
     model_config = {"env_file": ".env"}
 

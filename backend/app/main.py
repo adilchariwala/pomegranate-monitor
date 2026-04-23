@@ -33,7 +33,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.allowed_origins.split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -101,7 +101,7 @@ def get_readings(
     sensor_id: Optional[str] = None,
     start: Optional[datetime] = None,
     end: Optional[datetime] = None,
-    limit: int = Query(100, ge=1, le=1000),
+    limit: int = Query(100, ge=1, le=5000),
     offset: int = Query(0, ge=0),
     _key: str = Security(require_api_key),
 ):
@@ -117,9 +117,11 @@ def get_readings(
             query["timestamp"]["$lte"] = end
 
     total = readings.count_documents(query)
+    # Sort ascending so oldest data is returned first within the time window
+    sort_dir = 1 if start else -1
     cursor = (
         readings.find(query)
-        .sort("timestamp", -1)
+        .sort("timestamp", sort_dir)
         .skip(offset)
         .limit(limit)
     )

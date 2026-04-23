@@ -44,7 +44,7 @@ export default function App() {
       ])
       setLatest(lat)
       setStats(st)
-      setHistory((hist.readings || []).reverse())  // oldest first for chart
+      setHistory(hist.readings || [])  // already oldest-first (backend sorts ascending when start param is used)
       setSensors(sens.sensors || [])
     } catch (e) {
       setDataErr(e.message)
