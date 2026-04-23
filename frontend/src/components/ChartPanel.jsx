@@ -4,8 +4,10 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine,
 } from 'recharts'
 
+const toF = c => c * 9 / 5 + 32
+
 const METRICS = [
-  { key: 'temperature',   label: '🌡 Temp (°C)',      color: '#e05252', unit: '°C',  refLow: 18, refHigh: 35 },
+  { key: 'temperature',   label: '🌡 Temp (°F)',      color: '#e05252', unit: '°F',  refLow: 64, refHigh: 95, transform: toF },
   { key: 'humidity',      label: '💧 Humidity (%)',    color: '#3a7bd5', unit: '%',   refLow: 40, refHigh: 60 },
   { key: 'soil_moisture', label: '🌱 Soil Moisture (%)', color: '#4caf72', unit: '%', refLow: 30, refHigh: 60 },
   { key: 'light_lux',    label: '☀️ Light (lux)',     color: '#f0a500', unit: ' lux', refLow: 10000 },
@@ -41,7 +43,7 @@ export default function ChartPanel({ history }) {
 
   const data = history.map(r => ({
     time: fmtTime(r.timestamp),
-    value: r[active],
+    value: metric.transform ? metric.transform(r[active]) : r[active],
   }))
 
   return (
