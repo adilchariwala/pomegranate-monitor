@@ -103,7 +103,6 @@ def get_readings(
     end: Optional[datetime] = None,
     limit: int = Query(100, ge=1, le=5000),
     offset: int = Query(0, ge=0),
-    _key: str = Security(require_api_key),
 ):
     readings = get_readings_collection()
     query: dict = {}
@@ -138,7 +137,6 @@ def get_readings(
          response_model=SensorReadingResponse, tags=["readings"])
 def get_latest(
     sensor_id: str,
-    _key: str = Security(require_api_key),
 ):
     readings = get_readings_collection()
     doc = readings.find_one(
@@ -156,7 +154,7 @@ def get_latest(
 # ── GET /sensors ───────────────────────────────────────────────────────────
 
 @app.get("/api/v1/sensors", tags=["sensors"])
-def list_sensors(_key: str = Security(require_api_key)):
+def list_sensors():
     sensors = get_sensors_collection()
     docs = list(sensors.find().sort("last_seen", -1))
     return {
@@ -180,7 +178,6 @@ def list_sensors(_key: str = Security(require_api_key)):
 def get_stats(
     sensor_id: str,
     hours: int = Query(24, ge=1, le=720),
-    _key: str = Security(require_api_key),
 ):
     readings = get_readings_collection()
     since = datetime.now(timezone.utc) - timedelta(hours=hours)

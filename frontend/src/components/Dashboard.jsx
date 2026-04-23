@@ -5,7 +5,7 @@ import ChartPanel from './ChartPanel.jsx'
 export default function Dashboard({
   latest, stats, history, sensors,
   sensorId, setSensorId, hours, setHours,
-  loading, dataErr, onRefresh, onLogout,
+  loading, dataErr, onRefresh,
 }) {
   const online = latest
     ? (Date.now() - new Date(latest.timestamp).getTime()) < 120_000
@@ -23,7 +23,6 @@ export default function Dashboard({
           <button className="btn-sm" onClick={onRefresh} disabled={loading}>
             {loading ? '…' : '↺ Refresh'}
           </button>
-          <button className="btn-sm" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
