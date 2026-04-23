@@ -10,7 +10,12 @@ export const fetchLatest   = (sensorId) => apiFetch(`/readings/${sensorId}/lates
 export const fetchStats    = (sensorId, hours) => apiFetch(`/sensors/${sensorId}/stats?hours=${hours}`)
 export const fetchHistory  = (sensorId, hours) => {
   const start = new Date(Date.now() - hours * 3600 * 1000).toISOString()
-  return apiFetch(`/readings?sensor_id=${sensorId}&start=${start}&limit=2000`)
+  // 7d window: downsample to 5-min buckets (~2016 pts); otherwise fetch raw with scaled limit
+  if (hours === 168) {
+    return apiFetch(`/readings?sensor_id=${sensorId}&start=${start}&bucket_minutes=5`)
+  }
+  const limit = hours <= 6 ? 1000 : hours <= 24 ? 3000 : 6000
+  return apiFetch(`/readings?sensor_id=${sensorId}&start=${start}&limit=${limit}`)
 }
 export const fetchSensors  = () => apiFetch('/sensors')
 export const fetchHealth   = () => apiFetch('/health')

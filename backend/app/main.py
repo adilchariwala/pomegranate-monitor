@@ -101,8 +101,9 @@ def get_readings(
     sensor_id: Optional[str] = None,
     start: Optional[datetime] = None,
     end: Optional[datetime] = None,
-    limit: int = Query(100, ge=1, le=5000),
+    limit: int = Query(100, ge=1, le=10000),
     offset: int = Query(0, ge=0),
+    bucket_minutes: Optional[int] = Query(None, ge=1, le=60),
 ):
     readings = get_readings_collection()
     query: dict = {}
@@ -114,6 +115,39 @@ def get_readings(
             query["timestamp"]["$gte"] = start
         if end:
             query["timestamp"]["$lte"] = end
+
+    if bucket_minutes:
+        bucket_ms = bucket_minutes * 60 * 1000
+        pipeline = [
+            {"$match": query},
+            {"$addFields": {
+                "bucket": {
+                    "$toDate": {
+                        "$multiply": [
+                            {"$floor": {"$divide": [{"$toLong": "$timestamp"}, bucket_ms]}},
+                            bucket_ms,
+                        ]
+                    }
+                }
+            }},
+            {"$group": {
+                "_id": "$bucket",
+                "timestamp": {"$first": "$bucket"},
+                "sensor_id": {"$first": "$sensor_id"},
+                "temperature": {"$avg": "$temperature"},
+                "humidity": {"$avg": "$humidity"},
+                "soil_moisture": {"$avg": "$soil_moisture"},
+                "light_lux": {"$avg": "$light_lux"},
+                "location": {"$first": "$location"},
+            }},
+            {"$sort": {"timestamp": 1}},
+        ]
+        docs = list(readings.aggregate(pipeline))
+        return {
+            "count": len(docs),
+            "total": len(docs),
+            "readings": [doc_to_reading(d) for d in docs],
+        }
 
     total = readings.count_documents(query)
     # Sort ascending so oldest data is returned first within the time window
