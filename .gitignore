@@ -17,4 +17,3 @@ frontend/dist/
 *.log
 cloudflared.tgz
 cloudflared
-spec/
