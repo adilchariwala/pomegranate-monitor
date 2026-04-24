@@ -104,7 +104,6 @@ def get_readings(
     limit: int = Query(100, ge=1, le=10000),
     offset: int = Query(0, ge=0),
     bucket_minutes: Optional[int] = Query(None, ge=1, le=60),
-    _key: str = Security(require_api_key),
 ):
     readings = get_readings_collection()
     query: dict = {}

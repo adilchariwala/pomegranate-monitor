@@ -75,9 +75,13 @@ class TestGetReadings:
         assert "readings" in data
         assert data["total"] == 1
 
-    def test_no_auth_returns_401(self, client):
+    def test_no_auth_returns_200(self, client, mock_readings_col, sample_reading_doc):
+        mock_cursor = MagicMock()
+        mock_cursor.__iter__ = MagicMock(return_value=iter([sample_reading_doc]))
+        mock_readings_col.find.return_value.sort.return_value.skip.return_value.limit.return_value = mock_cursor
+        mock_readings_col.count_documents.return_value = 1
         resp = client.get("/api/v1/readings")
-        assert resp.status_code == 401
+        assert resp.status_code == 200
 
 
 # ── GET /readings/{sensor_id}/latest ──────────────────────────────────────
